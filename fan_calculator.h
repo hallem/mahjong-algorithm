@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2016-2027 Jeff Wang <summer_insects@163.com>
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,18 +18,18 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
-****************************************************************************/
+ ****************************************************************************/
 
 #ifndef __MAHJONG_ALGORITHM__FAN_CALCULATOR_H__
 #define __MAHJONG_ALGORITHM__FAN_CALCULATOR_H__
 
 #include "tile.h"
 
-#define SUPPORT_CONCEALED_KONG_AND_MELDED_KONG      1  // 支持明暗杠
-#define KNITTED_STRAIGHT_BODY_WITH_ECS              1  // 组合龙龙身的边嵌钓
-#define DISTINGUISH_PURE_SHIFTED_CHOWS              0  // 区分一色三（四）步的宽窄
-#define NINE_GATES_WHEN_BLESSING_OF_HEAVEN          1  // 天和支持九莲宝灯
-#define SUPPORT_BLESSINGS                           0  // 支持天和、地和、人和
+#define SUPPORT_CONCEALED_KONG_AND_MELDED_KONG      1  // Support Concealed Kong and Melded Kong
+#define KNITTED_STRAIGHT_BODY_WITH_ECS              1  // Edge/closed/single wait on body of Knitted Straight
+#define DISTINGUISH_PURE_SHIFTED_CHOWS              0  // Distinguish step interval of Pure Shifted Chows
+#define NINE_GATES_WHEN_BLESSING_OF_HEAVEN          1  // Support Nine Gates when Blessing of Heaven
+#define SUPPORT_BLESSINGS                           0  // Support Blessing of Heaven, Earth, and Human
 
 namespace mahjong {
 
@@ -39,137 +39,137 @@ namespace mahjong {
  */
 
 /**
- * @brief 番种
+ * @brief Fan types
  */
 enum fan_t {
-    FAN_NONE = 0,                       ///< 无效
-    BIG_FOUR_WINDS,                     ///< 大四喜
-    BIG_THREE_DRAGONS,                  ///< 大三元
-    ALL_GREEN,                          ///< 绿一色
-    NINE_GATES,                         ///< 九莲宝灯
-    FOUR_KONGS,                         ///< 四杠
-    SEVEN_SHIFTED_PAIRS,                ///< 连七对
-    THIRTEEN_ORPHANS,                   ///< 十三幺
+    FAN_NONE = 0,                       ///< Invalid
+    BIG_FOUR_WINDS,                     ///< Big Four Winds
+    BIG_THREE_DRAGONS,                  ///< Big Three Dragons
+    ALL_GREEN,                          ///< All Green
+    NINE_GATES,                         ///< Nine Gates
+    FOUR_KONGS,                         ///< Four Kongs
+    SEVEN_SHIFTED_PAIRS,                ///< Seven Shifted Pairs
+    THIRTEEN_ORPHANS,                   ///< Thirteen Orphans
 
-    ALL_TERMINALS,                      ///< 清幺九
-    LITTLE_FOUR_WINDS,                  ///< 小四喜
-    LITTLE_THREE_DRAGONS,               ///< 小三元
-    ALL_HONORS,                         ///< 字一色
-    FOUR_CONCEALED_PUNGS,               ///< 四暗刻
-    PURE_TERMINAL_CHOWS,                ///< 一色双龙会
+    ALL_TERMINALS,                      ///< All Terminals
+    LITTLE_FOUR_WINDS,                  ///< Little Four Winds
+    LITTLE_THREE_DRAGONS,               ///< Little Three Dragons
+    ALL_HONORS,                         ///< All Honors
+    FOUR_CONCEALED_PUNGS,               ///< Four Concealed Pungs
+    PURE_TERMINAL_CHOWS,                ///< Pure Terminal Chows
 
-    QUADRUPLE_CHOW,                     ///< 一色四同顺
-    FOUR_PURE_SHIFTED_PUNGS,            ///< 一色四节高
+    QUADRUPLE_CHOW,                     ///< Quadruple Chow
+    FOUR_PURE_SHIFTED_PUNGS,            ///< Four Pure Shifted Pungs
 
 #if DISTINGUISH_PURE_SHIFTED_CHOWS
-    FOUR_PURE_SHIFTED_CHOWS_1,          ///< 一色四步高Ⅰ
-    FOUR_PURE_SHIFTED_CHOWS_2,          ///< 一色四步高Ⅱ
+    FOUR_PURE_SHIFTED_CHOWS_1,          ///< Four Pure Shifted Chows I
+    FOUR_PURE_SHIFTED_CHOWS_2,          ///< Four Pure Shifted Chows II
 #else
-    FOUR_PURE_SHIFTED_CHOWS,            ///< 一色四步高
+    FOUR_PURE_SHIFTED_CHOWS,            ///< Four Pure Shifted Chows
 #endif
-    THREE_KONGS,                        ///< 三杠
-    ALL_TERMINALS_AND_HONORS,           ///< 混幺九
+    THREE_KONGS,                        ///< Three Kongs
+    ALL_TERMINALS_AND_HONORS,           ///< All Terminals and Honors
 
-    SEVEN_PAIRS,                        ///< 七对
-    GREATER_HONORS_AND_KNITTED_TILES,   ///< 七星不靠
-    ALL_EVEN_PUNGS,                     ///< 全双刻
-    FULL_FLUSH,                         ///< 清一色
-    PURE_TRIPLE_CHOW,                   ///< 一色三同顺
-    PURE_SHIFTED_PUNGS,                 ///< 一色三节高
-    UPPER_TILES,                        ///< 全大
-    MIDDLE_TILES,                       ///< 全中
-    LOWER_TILES,                        ///< 全小
+    SEVEN_PAIRS,                        ///< Seven Pairs
+    GREATER_HONORS_AND_KNITTED_TILES,   ///< Greater Honors and Knitted Tiles
+    ALL_EVEN_PUNGS,                     ///< All Even Pungs
+    FULL_FLUSH,                         ///< Full Flush
+    PURE_TRIPLE_CHOW,                   ///< Pure Triple Chow
+    PURE_SHIFTED_PUNGS,                 ///< Pure Shifted Pungs
+    UPPER_TILES,                        ///< Upper Tiles
+    MIDDLE_TILES,                       ///< Middle Tiles
+    LOWER_TILES,                        ///< Lower Tiles
 
-    PURE_STRAIGHT,                      ///< 清龙
-    THREE_SUITED_TERMINAL_CHOWS,        ///< 三色双龙会
+    PURE_STRAIGHT,                      ///< Pure Straight
+    THREE_SUITED_TERMINAL_CHOWS,        ///< Three-Suited Terminal Chows
 #if DISTINGUISH_PURE_SHIFTED_CHOWS
-    PURE_SHIFTED_CHOWS_1,               ///< 一色三步高Ⅰ
-    PURE_SHIFTED_CHOWS_2,               ///< 一色三步高Ⅱ
+    PURE_SHIFTED_CHOWS_1,               ///< Pure Shifted Chows I
+    PURE_SHIFTED_CHOWS_2,               ///< Pure Shifted Chows II
 #else
-    PURE_SHIFTED_CHOWS,                 ///< 一色三步高
+    PURE_SHIFTED_CHOWS,                 ///< Pure Shifted Chows
 #endif
-    ALL_FIVE,                           ///< 全带五
-    TRIPLE_PUNG,                        ///< 三同刻
-    THREE_CONCEALED_PUNGS,              ///< 三暗刻
+    ALL_FIVE,                           ///< All Five
+    TRIPLE_PUNG,                        ///< Triple Pung
+    THREE_CONCEALED_PUNGS,              ///< Three Concealed Pungs
 
-    LESSER_HONORS_AND_KNITTED_TILES,    ///< 全不靠
-    KNITTED_STRAIGHT,                   ///< 组合龙
-    UPPER_FOUR,                         ///< 大于五
-    LOWER_FOUR,                         ///< 小于五
-    BIG_THREE_WINDS,                    ///< 三风刻
+    LESSER_HONORS_AND_KNITTED_TILES,    ///< Lesser Honors and Knitted Tiles
+    KNITTED_STRAIGHT,                   ///< Knitted Straight
+    UPPER_FOUR,                         ///< Upper Four
+    LOWER_FOUR,                         ///< Lower Four
+    BIG_THREE_WINDS,                    ///< Big Three Winds
 
-    MIXED_STRAIGHT,                     ///< 花龙
-    REVERSIBLE_TILES,                   ///< 推不倒
-    MIXED_TRIPLE_CHOW,                  ///< 三色三同顺
-    MIXED_SHIFTED_PUNGS,                ///< 三色三节高
-    CHICKEN_HAND,                       ///< 无番和
-    LAST_TILE_DRAW,                     ///< 妙手回春
-    LAST_TILE_CLAIM,                    ///< 海底捞月
-    OUT_WITH_REPLACEMENT_TILE,          ///< 杠上开花
-    ROBBING_THE_KONG,                   ///< 抢杠和
+    MIXED_STRAIGHT,                     ///< Mixed Straight
+    REVERSIBLE_TILES,                   ///< Reversible Tiles
+    MIXED_TRIPLE_CHOW,                  ///< Mixed Triple Chow
+    MIXED_SHIFTED_PUNGS,                ///< Mixed Shifted Pungs
+    CHICKEN_HAND,                       ///< Chicken Hand
+    LAST_TILE_DRAW,                     ///< Last Tile Draw
+    LAST_TILE_CLAIM,                    ///< Last Tile Claim
+    OUT_WITH_REPLACEMENT_TILE,          ///< Out with Replacement Tile
+    ROBBING_THE_KONG,                   ///< Robbing the Kong
 
-    ALL_PUNGS,                          ///< 碰碰和
-    HALF_FLUSH,                         ///< 混一色
-    MIXED_SHIFTED_CHOWS,                ///< 三色三步高
-    ALL_TYPES,                          ///< 五门齐
-    MELDED_HAND,                        ///< 全求人
-    TWO_CONCEALED_KONGS,                ///< 双暗杠
-    TWO_DRAGONS_PUNGS,                  ///< 双箭刻
+    ALL_PUNGS,                          ///< All Pungs
+    HALF_FLUSH,                         ///< Half Flush
+    MIXED_SHIFTED_CHOWS,                ///< Mixed Shifted Chows
+    ALL_TYPES,                          ///< All Types
+    MELDED_HAND,                        ///< Melded Hand
+    TWO_CONCEALED_KONGS,                ///< Two Concealed Kongs
+    TWO_DRAGONS_PUNGS,                  ///< Two Dragons Pungs
 
-    OUTSIDE_HAND,                       ///< 全带幺
-    FULLY_CONCEALED_HAND,               ///< 不求人
-    TWO_MELDED_KONGS,                   ///< 双明杠
-    LAST_TILE,                          ///< 和绝张
+    OUTSIDE_HAND,                       ///< Outside Hand
+    FULLY_CONCEALED_HAND,               ///< Fully Concealed Hand
+    TWO_MELDED_KONGS,                   ///< Two Melded Kongs
+    LAST_TILE,                          ///< Last Tile
 
-    DRAGON_PUNG,                        ///< 箭刻
-    PREVALENT_WIND,                     ///< 圈风刻
-    SEAT_WIND,                          ///< 门风刻
-    CONCEALED_HAND,                     ///< 门前清
-    ALL_CHOWS,                          ///< 平和
-    TILE_HOG,                           ///< 四归一
-    DOUBLE_PUNG,                        ///< 双同刻
-    TWO_CONCEALED_PUNGS,                ///< 双暗刻
-    CONCEALED_KONG,                     ///< 暗杠
-    ALL_SIMPLES,                        ///< 断幺
+    DRAGON_PUNG,                        ///< Dragon Pung
+    PREVALENT_WIND,                     ///< Prevalent Wind
+    SEAT_WIND,                          ///< Seat Wind
+    CONCEALED_HAND,                     ///< Concealed Hand
+    ALL_CHOWS,                          ///< All Chows
+    TILE_HOG,                           ///< Tile Hog
+    DOUBLE_PUNG,                        ///< Double Pung
+    TWO_CONCEALED_PUNGS,                ///< Two Concealed Pungs
+    CONCEALED_KONG,                     ///< Concealed Kong
+    ALL_SIMPLES,                        ///< All Simples
 
-    PURE_DOUBLE_CHOW,                   ///< 一般高
-    MIXED_DOUBLE_CHOW,                  ///< 喜相逢
-    SHORT_STRAIGHT,                     ///< 连六
-    TWO_TERMINAL_CHOWS,                 ///< 老少副
-    PUNG_OF_TERMINALS_OR_HONORS,        ///< 幺九刻
-    MELDED_KONG,                        ///< 明杠
-    ONE_VOIDED_SUIT,                    ///< 缺一门
-    NO_HONORS,                          ///< 无字
-    EDGE_WAIT,                          ///< 独听・边张
-    CLOSED_WAIT,                        ///< 独听・嵌张
-    SINGLE_WAIT,                        ///< 独听・单钓
-    SELF_DRAWN,                         ///< 自摸
+    PURE_DOUBLE_CHOW,                   ///< Pure Double Chow
+    MIXED_DOUBLE_CHOW,                  ///< Mixed Double Chow
+    SHORT_STRAIGHT,                     ///< Short Straight
+    TWO_TERMINAL_CHOWS,                 ///< Two Terminal Chows
+    PUNG_OF_TERMINALS_OR_HONORS,        ///< Pung of Terminals or Honors
+    MELDED_KONG,                        ///< Melded Kong
+    ONE_VOIDED_SUIT,                    ///< One Voided Suit
+    NO_HONORS,                          ///< No Honors
+    EDGE_WAIT,                          ///< Edge Wait
+    CLOSED_WAIT,                        ///< Closed Wait
+    SINGLE_WAIT,                        ///< Single Wait
+    SELF_DRAWN,                         ///< Self-Drawn
 
-    FLOWER_TILES,                       ///< 花牌
+    FLOWER_TILES,                       ///< Flower Tiles
 
 #if SUPPORT_CONCEALED_KONG_AND_MELDED_KONG
-    CONCEALED_KONG_AND_MELDED_KONG,     ///< 明暗杠
+    CONCEALED_KONG_AND_MELDED_KONG,     ///< Concealed Kong and Melded Kong
 #endif
 
 #if SUPPORT_BLESSINGS
-    BLESSING_OF_HEAVEN,                 ///< 天和
-    BLESSING_OF_EARTH,                  ///< 地和
-    BLESSING_OF_HUMAN_1,                ///< 人和Ⅰ（点和）
-    BLESSING_OF_HUMAN_2,                ///< 人和Ⅱ（自摸）
+    BLESSING_OF_HEAVEN,                 ///< Blessing of Heaven
+    BLESSING_OF_EARTH,                  ///< Blessing of Earth
+    BLESSING_OF_HUMAN_1,                ///< Blessing of Human I (discard)
+    BLESSING_OF_HUMAN_2,                ///< Blessing of Human II (self-drawn)
 #endif
 
     FAN_TABLE_SIZE
 };
 
 /**
- * @brief 风（用来表示圈风门风）
+ * @brief Wind (used to represent prevalent and seat winds)
  */
 enum class wind_t {
     EAST, SOUTH, WEST, NORTH
 };
 
 /**
- * @brief 和牌标记
+ * @brief Win flag
  */
 typedef uint8_t win_flag_t;
 
@@ -177,12 +177,12 @@ typedef uint8_t win_flag_t;
  * @name win flag
  * @{
  */
-#define WIN_FLAG_DISCARD        0   ///< 点和
-#define WIN_FLAG_SELF_DRAWN     1   ///< 自摸
-#define WIN_FLAG_LAST_TILE      2   ///< 绝张
-#define WIN_FLAG_KONG_INVOLVED  4   ///< 关于杠，复合点和时为抢杠和，复合自摸则为杠上开花
-#define WIN_FLAG_WALL_LAST      8   ///< 牌墙最后一张，复合点和时为海底捞月，复合自摸则为妙手回春
-#define WIN_FLAG_INITIAL        16  ///< 起手，复合点和时为地和（庄家点）或人和（闲家点），复合自摸则为天和（庄家）或人和（闲家）
+#define WIN_FLAG_DISCARD        0   ///< Win by discard
+#define WIN_FLAG_SELF_DRAWN     1   ///< Self-drawn
+#define WIN_FLAG_LAST_TILE      2   ///< Last tile
+#define WIN_FLAG_KONG_INVOLVED  4   ///< Kong involved: combined with discard is Robbing the Kong, with self-drawn is Out with Replacement Tile
+#define WIN_FLAG_WALL_LAST      8   ///< Last tile of wall: combined with discard is Last Tile Claim, with self-drawn is Last Tile Draw
+#define WIN_FLAG_INITIAL        16  ///< Initial hand: combined with discard is Blessing of Earth (dealer discards) or Blessing of Human (non-dealer discards), with self-drawn is Blessing of Heaven (dealer) or Blessing of Human (non-dealer)
 
 /**
  * @}
@@ -192,56 +192,54 @@ typedef uint8_t win_flag_t;
  * @name error codes
  * @{
  */
-#define ERROR_WRONG_TILES_COUNT -1              ///< 错误的张数
-#define ERROR_TILE_MORE_THAN_4 -2               ///< 某张牌出现超过4枚
-#define ERROR_NOT_WIN -3                        ///< 没和牌
+#define ERROR_WRONG_TILES_COUNT -1              ///< Wrong number of tiles
+#define ERROR_TILE_MORE_THAN_4 -2               ///< A tile appears more than 4 times
+#define ERROR_NOT_WIN -3                        ///< Hand is not a winning hand
 /**
  * @}
  */
 
 /**
- * @brief 算番参数
+ * @brief Fan calculation parameters
  */
 struct calculate_param_t {
-    hand_tiles_t hand_tiles;    ///< 手牌
-    tile_t win_tile;            ///< 和牌张
-    uint8_t flower_count;       ///< 花牌数
-    win_flag_t win_flag;        ///< 和牌标记
-    wind_t prevalent_wind;      ///< 圈风
-    wind_t seat_wind;           ///< 门风
+    hand_tiles_t hand_tiles;    ///< Hand tiles
+    tile_t win_tile;            ///< Winning tile
+    uint8_t flower_count;       ///< Number of flower tiles
+    win_flag_t win_flag;        ///< Win flag
+    wind_t prevalent_wind;      ///< Prevalent wind
+    wind_t seat_wind;           ///< Seat wind
 };
 
 /**
- * @brief 番表
+ * @brief Fan table
  */
 typedef uint16_t fan_table_t[FAN_TABLE_SIZE];
 
 /**
- * @brief 算番
+ * @brief Calculate fan
  *
- * @param [in] calculate_param 算番参数
- * @param [out] fan_table 番表，当有某种番时，相应的会设置为这种番出现的次数
- * @retval >0 番数
- * @retval ERROR_WRONG_TILES_COUNT 错误的张数
- * @retval ERROR_TILE_COUNT_GREATER_THAN_4 某张牌出现超过4枚
- * @retval ERROR_NOT_WIN 没和牌
+ * @param [in] calculate_param Fan calculation parameters
+ * @param [out] fan_table Fan table; when a fan is present, it will be set to the count of occurrences
+ * @retval >0 Fan points
+ * @retval ERROR_WRONG_TILES_COUNT Wrong number of tiles
+ * @retval ERROR_TILE_MORE_THAN_4 A tile appears more than 4 times
+ * @retval ERROR_NOT_WIN Hand is not a winning hand
  */
 int calculate_fan(const calculate_param_t *calculate_param, fan_table_t *fan_table);
 
 #if SUPPORT_BLESSINGS
 /**
- * @brief 撤销天地人和
+ * @brief Revoke Blessing of Heaven, Earth, and Human
  *
- * @param [out] fan_table 番表
- * @retval 番数校正
+ * @param [out] fan_table Fan table
+ * @retval Corrected fan points
  */
 int revoke_blessings(fan_table_t &fan_table);
 #endif
 
-#if 0
-
 /**
- * @brief 番名（英文）
+ * @brief Fan names (English)
  */
 template <class Dummy = int>
 struct fan_name {
@@ -269,12 +267,12 @@ const char *fan_name<Dummy>::text[] = {
 #endif
     "All Five", "Triple Pung", "Three Concealed Pungs",
     "Lesser Honors and Knitted Tiles", "Knitted Straight", "Upper Four", "Lower Four", "Big Three Winds",
-    "Mixed Straight", "Reversible Tiles", "Mixed Triple Chow", "Mixed Shifted Pungs", "Chicken Hand", "Last Tile Draw", "Last Tile Claim", "Out with Replacement Tile", "Robbing The Kong",
+    "Mixed Straight", "Reversible Tiles", "Mixed Triple Chow", "Mixed Shifted Pungs", "Chicken Hand", "Last Tile Draw", "Last Tile Claim", "Out with Replacement Tile", "Robbing the Kong",
     "All Pungs", "Half Flush", "Mixed Shifted Chows", "All Types", "Melded Hand", "Two Concealed Kongs", "Two Dragons Pungs",
     "Outside Hand", "Fully Concealed Hand", "Two Melded Kongs", "Last Tile",
     "Dragon Pung", "Prevalent Wind", "Seat Wind", "Concealed Hand", "All Chows", "Tile Hog", "Double Pung",
     "Two Concealed Pungs", "Concealed Kong", "All Simples",
-    "Pure Double Chow", "Mixed Double Chow", "Short Straight", "Two Terminal Chows", "Pung of Terminals or Honors", "Melded Kong", "One Voided Suit", "No Honors", "Unique Wait (Edge)", "Unique Wait (Closed)", "Unique Wait (Single)", "Self-Drawn",
+    "Pure Double Chow", "Mixed Double Chow", "Short Straight", "Two Terminal Chows", "Pung of Terminals or Honors", "Melded Kong", "One Voided Suit", "No Honors", "Edge Wait", "Closed Wait", "Single Wait", "Self-Drawn",
     "Flower Tiles"
 #if SUPPORT_CONCEALED_KONG_AND_MELDED_KONG
     , "Concealed Kong and Melded Kong"
@@ -284,73 +282,8 @@ const char *fan_name<Dummy>::text[] = {
 #endif
 };
 
-#else
-
-#ifdef _MSC_VER
-#pragma execution_character_set("utf-8")
-#endif
-
-// u8 literal prefix
-#ifndef __UTF8_TEXT
-// VS2015 GCC4.7 Clang5.0
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || (defined(__GNUC__) && ((__GNUC__ << 8 | __GNUC_MINOR__) >= 0x407)) || (defined(__clang__) && (__clang_major__ >= 5))
-#define __UTF8_TEXT(quote) u8 ## quote
-#else
-#define __UTF8_TEXT(quote) quote
-#endif
-#endif
-
-#ifndef __UTF8
-#define __UTF8(quote) __UTF8_TEXT(quote)
-#endif
-
 /**
- * @brief 番名（简体中文）
- */
-template <class Dummy = int>
-struct fan_name {
-    static const char *text[FAN_TABLE_SIZE];
-};
-
-template <class Dummy>
-const char *fan_name<Dummy>::text[] = {
-    __UTF8("无"),
-    __UTF8("大四喜"), __UTF8("大三元"), __UTF8("绿一色"), __UTF8("九莲宝灯"), __UTF8("四杠"), __UTF8("连七对"), __UTF8("十三幺"),
-    __UTF8("清幺九"), __UTF8("小四喜"), __UTF8("小三元"), __UTF8("字一色"), __UTF8("四暗刻"), __UTF8("一色双龙会"),
-    __UTF8("一色四同顺"), __UTF8("一色四节高"),
-#if DISTINGUISH_PURE_SHIFTED_CHOWS
-    __UTF8("一色四步高Ⅰ"), __UTF8("一色四步高Ⅱ"),
-#else
-    __UTF8("一色四步高"),
-#endif
-    __UTF8("三杠"), __UTF8("混幺九"),
-    __UTF8("七对"), __UTF8("七星不靠"), __UTF8("全双刻"), __UTF8("清一色"), __UTF8("一色三同顺"), __UTF8("一色三节高"), __UTF8("全大"), __UTF8("全中"), __UTF8("全小"),
-    __UTF8("清龙"), __UTF8("三色双龙会"),
-#if DISTINGUISH_PURE_SHIFTED_CHOWS
-    __UTF8("一色三步高Ⅰ"), __UTF8("一色三步高Ⅱ"),
-#else
-    __UTF8("一色三步高"),
-#endif
-    __UTF8("全带五"), __UTF8("三同刻"), __UTF8("三暗刻"),
-    __UTF8("全不靠"), __UTF8("组合龙"), __UTF8("大于五"), __UTF8("小于五"), __UTF8("三风刻"),
-    __UTF8("花龙"), __UTF8("推不倒"), __UTF8("三色三同顺"), __UTF8("三色三节高"), __UTF8("无番和"), __UTF8("妙手回春"), __UTF8("海底捞月"), __UTF8("杠上开花"), __UTF8("抢杠和"),
-    __UTF8("碰碰和"), __UTF8("混一色"), __UTF8("三色三步高"), __UTF8("五门齐"), __UTF8("全求人"), __UTF8("双暗杠"), __UTF8("双箭刻"),
-    __UTF8("全带幺"), __UTF8("不求人"), __UTF8("双明杠"), __UTF8("和绝张"),
-    __UTF8("箭刻"), __UTF8("圈风刻"), __UTF8("门风刻"), __UTF8("门前清"), __UTF8("平和"), __UTF8("四归一"), __UTF8("双同刻"), __UTF8("双暗刻"), __UTF8("暗杠"), __UTF8("断幺"),
-    __UTF8("一般高"), __UTF8("喜相逢"), __UTF8("连六"), __UTF8("老少副"), __UTF8("幺九刻"), __UTF8("明杠"), __UTF8("缺一门"), __UTF8("无字"), __UTF8("独听・边张"), __UTF8("独听・嵌张"), __UTF8("独听・单钓"), __UTF8("自摸"),
-    __UTF8("花牌")
-#if SUPPORT_CONCEALED_KONG_AND_MELDED_KONG
-    , __UTF8("明暗杠")
-#endif
-#if SUPPORT_BLESSINGS
-    , __UTF8("天和"), __UTF8("地和"), __UTF8("人和Ⅰ"), __UTF8("人和Ⅱ")
-#endif
-};
-
-#endif
-
-/**
- * @brief 番值
+ * @brief Fan values
  */
 template <class Dummy = int>
 struct fan_value {

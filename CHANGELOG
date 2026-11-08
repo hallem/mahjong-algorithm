@@ -1,140 +1,140 @@
 2024-01-18
-【修复】输入字符串解析牌张bug
+[Fix] Bug in parsing tiles from input string
 
 2023-10-29
-【优化】使天和支持九莲宝灯
-【优化】按MIL规则组合龙身如果能解释为边嵌钓的，计边嵌钓
-【新增】不使用天和、地和、人和时，给一个撤销的接口
+[Optimize] Support Nine Gates when Blessing of Heaven
+[Optimize] According to MIL rules, if the body of Knitted Straight can be interpreted as edge/closed/single wait, score it accordingly
+[New] Provide an interface to revoke Blessing of Heaven, Blessing of Earth, and Blessing of Human when not in use
 
 2023-09-02
-【优化】番数相同时，优先选择三同刻
+[Optimize] Prefer Triple Pung when fan points are equal
 
 2023-05-30
-【修复】02-17引入组合龙四归一bug
+[Fix] Bug in Tile Hog for Knitted Straight introduced on 02-17
 
 2023-05-20
-【修复】03-04引入七对与基本型两拆时独听判断
+[Fix] Unique wait check when decomposing hand into both Seven Pairs and regular form introduced on 03-04
 
 2023-05-13
-【新增】区分一色三步、四步的宽窄（即区分三步与连环）
-【新增】预留天和、地和、人和
+[New] Distinguish step interval (wide vs narrow) for Pure Shifted Chows and Four Pure Shifted Chows
+[New] Reserve Blessing of Heaven, Blessing of Earth, and Blessing of Human
 
 2023-05-12
-【优化】4组顺子算番（3+1结构）
+[Optimize] Scoring for 4 chows (3+1 structure)
 
 2023-03-04
-【优化】性能优化（判断是否多面听）
+[Optimize] Performance optimization (checking multiple-wait)
 
 2023-02-19
-【优化】性能优化
+[Optimize] Performance optimization
 
 2023-02-17
-【优化】组合龙算番
+[Optimize] Knitted Straight scoring
 
 2023-02-15
-【修复】组合龙一般型天和问题
+[Fix] Blessing of Heaven issue with regular form Knitted Straight
 
 2023-02-13
-【优化】把九莲宝灯当作特殊和型算番
-【优化】特殊和型最后一步调整逻辑
+[Optimize] Score Nine Gates as a special winning form
+[Optimize] Final adjustment logic for special winning forms
 
 2022-04-12
-【优化】无对子的牌不可能作为基本和牌型拆解
+[Optimize] Hands without pairs cannot be decomposed as regular winning form
 
 2022-03-07
-【优化】优先选择一色三同顺、全中全带五
-【修复】潜在野指针问题
+[Optimize] Prefer Pure Triple Chow and All Five
+[Fix] Potential dangling pointer issue
 
 2022-01-21
-【重构】去掉字符串化的逗号和天凤兼容
+[Refactor] Remove comma and Tenhou compatibility in stringify
 
 2021-05-01
-【优化】递归拆分手牌时，重复分支判断的逻辑优化
+[Optimize] Logic optimization for duplicate branch pruning when recursively decomposing hand tiles
 
 2019-04-23
-【新增】天和不计和牌张相关番
+[New] Blessing of Heaven does not score win-tile related fan
 
 2019-04-14
-【修复】4副露上听数bug
+[Fix] Bug in shanten calculation for 4 melds
 
 2018-12-25
-【新增】加杠与直杠的区分
-【新增】花牌判断
+[New] Distinguish between added kong (promoted kong) and direct melded kong
+[New] Flower tiles check
 
 2018-09-17
-【修复】修正番种自相矛盾，比如不可能为绝张的，被传了绝张标记，算番时应予以去除
+[Fix] Correct conflicting fan flags (e.g. if impossible to be Last Tile but passed Last Tile flag, clear it during scoring)
 
 2018-08-15
-【优化】鉴于圈风门风逻辑较复杂，将其调整步骤改到最后
+[Optimize] Move Prevalent Wind and Seat Wind adjustments to the final step due to complex logic
 
 2018-07-26
-【修复】上听数计算保存路径时，重复保存，牌太复杂时，状态溢出
+[Fix] State overflow on complex hands caused by duplicate saves when recording paths during shanten calculation
 
 2018-04-18
-【修复】1122233334444s2s算番错误
+[Fix] Scoring error for 1122233334444s2s
 
 2018-03-29
-【修复】组合龙算番bug
+[Fix] Knitted Straight scoring bug
 
 2017-11-10
-【修复】当有一副顺子与其他3组无任何关系时，多算番的bug
+[Fix] Bug of overcounting fan when one chow is unrelated to the other 3 sets
 
 2017-10-23
-【修复】修改套算一次的逻辑，修复123m 789p 789s1299p3p漏算老少副的bug
+[Fix] Update combine-once logic, fixing missed Two Terminal Chows bug in 123m 789p 789s1299p3p
 
 2017-04-09
-【修复】三杠少计双暗刻的bug
+[Fix] Bug where Three Kongs undercounted Two Concealed Pungs
 
 2017-04-08
-【变更】暗杠的加计改为国际麻将联盟（MIL）的规则
+[Change] Update additional scoring for concealed kongs to Mahjong International League (MIL) rules
 
 2017-03-26
-【修复】七星七对误判为连七对的bug
+[Fix] Bug where Greater Honors and Knitted Tiles / Seven Pairs was misidentified as Seven Shifted Pairs
 
 2016-12-18
-【修复】特殊和型漏计附加条件的bug
+[Fix] Bug where special winning forms missed additional win condition fan
 
 2016-12-17
-【修复】缺一门判断错误的bug
-【修复】非门清状态下组合龙的bug
+[Fix] Bug in One Voided Suit check
+[Fix] Bug with Knitted Straight in non-concealed state
 
 2016-12-15
-【变更】清幺九按通行计法不计双同刻
-【修复】小四喜多计幺九刻的bug
+[Change] Under common practice, All Terminals does not score Double Pung
+[Fix] Bug where Little Four Winds overcounted Pung of Terminals or Honors
 
 2016-12-14
-【修复】暗刻数计算错误
+[Fix] Error in counting concealed pungs
 
 2016-07-28
-【修复】门清的一色双龙会漏计边嵌钓问题
+[Fix] Missed edge/closed/single wait in concealed Pure Terminal Chows
 
 2016-07-23
-【修复】七对与常规形多面听，多计边嵌钓问题，如445566m2277779s，和8s不应该计嵌张
+[Fix] Overcounting edge/closed/single wait on multiple waits between Seven Pairs and regular form (e.g., 445566m2277779s winning on 8s should not score Closed Wait)
 
 2016-04-18
-【新增】不得相同原则
+[New] Principle of Non-Repetition (Freedom from Duplication)
 
 2016-04-10
-【修复】三风刻重复计算19刻的bug
+[Fix] Bug where Big Three Winds repeatedly counted Pung of Terminals or Honors
 
 2016-04-04
-【修复】当只有三组刻子刚好构成三节高（四组刻子构成四节高）时可能漏计幺九刻bug
+[Fix] Bug where Pung of Terminals or Honors might be missed when only 3 pungs formed Pure Shifted Pungs (or 4 pungs formed Four Pure Shifted Pungs)
 
 2016-04-03
-【新增】明暗杠
+[New] Concealed Kong and Melded Kong
 
 2016-04-01
-【修复】九莲宝灯不计不求人，减计一个幺九刻
+[Fix] Nine Gates does not score Fully Concealed Hand, deduct one Pung of Terminals or Honors
 
 2016-03-18
-【新增】严格98规则，绿一色 字一色 清混幺九 字一色 全大中小 大小于五不接受七对。用宏控制
+[New] Strict 98 rules: All Green, All Honors, All Terminals, All Terminals and Honors, All Upper/Middle/Lower, Upper/Lower Four do not accept Seven Pairs. Controlled by macro
 
 2016-03-10
-【修复】清幺九不计所有的同刻
+[Fix] All Terminals does not score any Double/Triple Pung
 
 2016-03-09
-【变更】双暗杠改为6番
-【新增】各种不计缺一门
+[Change] Change Two Concealed Kongs to 6 fan
+[New] Various exclusions of One Voided Suit
 
 2016-02-28
-【新增】第一版
+[New] First version

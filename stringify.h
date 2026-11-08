@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2016-2027 Jeff Wang <summer_insects@163.com>
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,14 +30,14 @@ namespace mahjong {
 using std::size_t;
 
 /**
- * @brief 字符串格式：
- * - 数牌：万=m 条=s 饼=p。后缀使用小写字母，一连串同花色的数牌可合并使用用一个后缀，如123m、678s等等。
- * - 字牌：东南西北=ESWN，中发白=CFP。使用大写字母。
- * - 吃、碰、杠用英文[]，可选用数字表示供牌来源。数字的具体规则如下：
- *    - 吃：表示第几张牌是由上家打出，如[567m2]表示57万吃6万（第2张）。对于不指定数字的，默认为吃第1张。
- *    - 碰：表示由哪家打出，1为上家，2为对家，3为下家，如[999s3]表示碰下家的9条。对于不指定数字的，默认为碰上家。
- *    - 杠：与碰类似，但对于不指定数字的，则认为是暗杠。例如：[SSSS]表示暗杠南；[8888p1]表示大明杠上家的8饼。当数字为5、6、7时，表示加杠。例如：[1111s6]表示碰对家的1条后，又摸到1条加杠。
- * - 范例
+ * @brief String format:
+ * - Numbered tiles: Characters = m, Bamboo = s, Dots = p. Suffixes use lowercase letters; consecutive tiles of the same suit can share a single suffix, e.g., 123m, 678s, etc.
+ * - Honor tiles: East, South, West, North = ESWN; Red, Green, White Dragons = CFP. Uses uppercase letters.
+ * - Chows, pungs, and kongs are enclosed in square brackets [], optionally using a digit to indicate the tile source:
+ *    - Chow: Indicates which tile in the sequence was discarded by the upper seat; e.g., [567m2] means 57m chowed the 6m (the 2nd tile). If omitted, defaults to the 1st tile.
+ *    - Pung: Indicates who discarded the tile: 1 for upper seat, 2 for opposite seat, 3 for lower seat; e.g., [999s3] means pung 9s from lower seat. If omitted, defaults to upper seat.
+ *    - Kong: Similar to pung, but if omitted, it is treated as a concealed kong. E.g.: [SSSS] means concealed kong of South; [8888p1] means melded kong of 8p from upper seat. When the digit is 5, 6, or 7, it represents an added kong (promoted kong). E.g.: [1111s6] means after punging 1s from opposite seat, drew another 1s to promote to kong.
+ * - Examples
  *    - [EEEE][CCCC][FFFF][PPPP]NN
  *    - 1112345678999s9s
  *    - [WWWW1][444s]45m678pFF6m
@@ -75,44 +75,44 @@ const char tile_name<Dummy>::honor[] = { 'E', 'S', 'W', 'N', 'C', 'F', 'P' };
 /**
  * @name error codes
  * @{
- *  解析牌的错误码
+ *  Error codes for parsing tiles
  */
-#define PARSE_NO_ERROR 0                                ///< 无错误
-#define PARSE_ERROR_ILLEGAL_CHARACTER -1                ///< 非法字符
-#define PARSE_ERROR_SUFFIX -2                           ///< 后缀错误
-#define PARSE_ERROR_WRONG_TILES_COUNT_FOR_FIXED_PACK -3 ///< 副露包含错误的牌数目
-#define PARSE_ERROR_CANNOT_MAKE_FIXED_PACK -4           ///< 无法正确解析副露
-#define PARSE_ERROR_TOO_MANY_FIXED_PACKS -5             ///< 过多组副露（一副合法手牌最多4副露）
-#define PARSE_ERROR_TOO_MANY_TILES -6                   ///< 过多牌
-#define PARSE_ERROR_TILE_COUNT_GREATER_THAN_4 -7        ///< 某张牌出现超过4枚
+#define PARSE_NO_ERROR 0                                ///< No error
+#define PARSE_ERROR_ILLEGAL_CHARACTER -1                ///< Illegal character
+#define PARSE_ERROR_SUFFIX -2                           ///< Suffix error
+#define PARSE_ERROR_WRONG_TILES_COUNT_FOR_FIXED_PACK -3 ///< Melded pack contains wrong number of tiles
+#define PARSE_ERROR_CANNOT_MAKE_FIXED_PACK -4           ///< Cannot correctly parse melded pack
+#define PARSE_ERROR_TOO_MANY_FIXED_PACKS -5             ///< Too many melded packs (a legal hand has at most 4 melds)
+#define PARSE_ERROR_TOO_MANY_TILES -6                   ///< Too many tiles
+#define PARSE_ERROR_TILE_COUNT_GREATER_THAN_4 -7        ///< A tile appears more than 4 times
 
  /**
   * @}
   */
 
 /**
- * @brief 字符串转换为手牌结构和上牌
- * @param [in] str 字符串
- * @param [in] len 字符串长度
- * @param [out] hand_tiles 手牌结构
- * @param [out] serving_tile 上的牌
- * @retval PARSE_NO_ERROR 无错误
- * @retval PARSE_ERROR_ILLEGAL_CHARACTER 非法字符
- * @retval PARSE_ERROR_NO_SUFFIX_AFTER_DIGIT 数字后面缺少后缀
- * @retval PARSE_ERROR_WRONG_TILES_COUNT_FOR_FIXED_PACK 副露包含错误的牌数目
- * @retval PARSE_ERROR_CANNOT_MAKE_FIXED_PACK 无法正确解析副露
- * @retval PARSE_ERROR_TOO_MANY_FIXED_PACKS 过多组副露（一副合法手牌最多4副露）
- * @retval PARSE_ERROR_TOO_MANY_TILES 过多牌
- * @retval PARSE_ERROR_TILE_COUNT_GREATER_THAN_4 某张牌出现超过4枚
+ * @brief Parse string into hand tiles structure and serving tile
+ * @param [in] str String
+ * @param [in] len String length
+ * @param [out] hand_tiles Hand tiles structure
+ * @param [out] serving_tile Serving/drawn tile
+ * @retval PARSE_NO_ERROR No error
+ * @retval PARSE_ERROR_ILLEGAL_CHARACTER Illegal character
+ * @retval PARSE_ERROR_NO_SUFFIX_AFTER_DIGIT Missing suffix after digits
+ * @retval PARSE_ERROR_WRONG_TILES_COUNT_FOR_FIXED_PACK Melded pack contains wrong number of tiles
+ * @retval PARSE_ERROR_CANNOT_MAKE_FIXED_PACK Cannot correctly parse melded pack
+ * @retval PARSE_ERROR_TOO_MANY_FIXED_PACKS Too many melded packs (a legal hand has at most 4 melds)
+ * @retval PARSE_ERROR_TOO_MANY_TILES Too many tiles
+ * @retval PARSE_ERROR_TILE_COUNT_GREATER_THAN_4 A tile appears more than 4 times
  */
 int parse_hand_tiles(const char *str, size_t len, hand_tiles_t *hand_tiles, tile_t *serving_tile);
 
 /**
- * @brief 手牌结构转换为字符串
- * @param [in] hand_tiles 手牌结构
- * @param [out] str 字符串
- * @param [in] max_size 字符串最大长度（注意：转换结果包含\0在内最长为35）
- * @return size_t 字符串长度
+ * @brief Convert hand tiles structure to string
+ * @param [in] hand_tiles Hand tiles structure
+ * @param [out] str Output string
+ * @param [in] max_size Maximum string buffer size (Note: result including \0 is at most 35 characters)
+ * @return size_t String length
  */
 size_t hand_tiles_to_string(const hand_tiles_t *hand_tiles, char *str, size_t max_size);
 

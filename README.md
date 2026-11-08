@@ -1,48 +1,48 @@
-mahjong-algorithm 关于麻将的各种算法
+mahjong-algorithm - Various Algorithms for Mahjong
 =========
 
-## 说明
-- 这些算法虽然是用C++写的，但并未使用C++的容器，可以很方便改写为其他语言。
-- fan_calculator 为算番相关。
-- shanten 为判断听牌、听牌计算、上听数计算、有效牌计算。
-- stringify 为字符串转化相关。
-- 详见unit_test.cpp。
+## Overview
+- Although these algorithms are written in C++, they do not use C++ container classes and can be easily ported to other programming languages.
+- `fan_calculator`: Fan (points/scoring) calculation.
+- `shanten`: Ready hand (tenpai) check, waiting tile calculation, shanten calculation, and useful tile calculation.
+- `stringify`: String conversion routines.
+- See `unit_test.cpp` for details.
 
-## 常见相关术语解释
-- 顺子：数牌中，花色相同序数相连的3张牌。
-- 刻子：三张相同的牌。碰出的为明刻，未碰出的为暗刻。俗称坎。杠也算刻子，明杠算明刻，暗杠算暗刻。
-- 面子：顺子和刻子的统称。俗称一句话、一坎牌。
-- 雀头：基本和牌形式中，单独组合的对子，也叫将、眼。
-- 基本和型：4面子1雀头的和牌形式。
-- 特殊和型：非4面子1雀头的和牌形式，在国标规则中，有七对、十三幺、全不靠等特殊和型。
-- 门清：也叫门前清，指不吃、不碰、不明杠的状态。特殊和型必然是门清状态。暗杠虽然不破门清，但会暴露出手牌不是特殊和型的信息。
-- 副露：吃牌、碰牌、杠牌的统称，即利用其他选手打出的牌完成自己手牌面子的行为，一般不包括暗杠，也叫鸣牌，俗称动牌。副露有时候也包括暗杠，此时将暗杠称为之暗副露，而吃、碰、明杠称为明副露。
-- 立牌：整个手牌除去吃、碰、杠之后的牌。
-- 手牌：包括立牌和吃、碰、杠的牌，有时仅指立牌。
-- 听牌：只差所需要的一张牌即能和牌的状态。俗称下叫、落叫、叫和（糊）。
-- 一上听：指差一张就能听牌的状态，也叫一向听、一入听。以此类推有二上听、三上听、N上听。
-- 上听数：达到听牌状态需要牌的张数。
-- 有效牌：能使上听数减少的牌，也称进张牌、上张牌。
-- 改良牌：能使有效牌增加的牌。通俗来说就是能使进张面变宽的牌。
-- 对子：两张相同的牌。雀头一定是对子，但对子不一定是雀头。
-- 两面：①数牌中，花色相同数字相邻的两张牌，如45m，与两侧的牌都构成顺子。也叫两头。②“两面搭子”的简称。
-- 嵌张：①数牌中，花色相同数字相隔1的两张牌，如57s，只能与中间的牌构成顺子，中间的这张牌称为嵌张。②“嵌张搭子”的简称。③国标麻将的“坎张”番种。
-- 边张：①也是数字相邻的两张牌，但由于处在数字的最小或最大边界位置，只能与一侧的牌构成顺子，如12m只能与3m构成顺子、89s只能与7s构成顺子，这张3m或者7s便称为边张。②“边张搭子”的简称。③国标麻将的“边张”番种。
-- 搭子：指差一张牌就能构成1组面子的两张牌。其形态有两面搭子、嵌张搭子、边张搭子，有时也可将对子看成是刻子搭子。
-- 复合搭子：3张或3张以上牌构成的搭子。常见的有：连嵌张、两面带对子、嵌张带对子、边张带对子等等形态。
-- 对倒：听牌时，其他牌都已经构成面子，剩余两对，只需任意一对成刻即可和牌，此时另一对充当雀头，这种听牌形态叫对倒，也叫双碰、对碰、对杵。
+## Common Terminology
+- Chow: A sequence of 3 consecutive numbered tiles of the same suit.
+- Pung: Three identical tiles. Claimed from a discard is a melded/open pung; kept in hand without claiming is a concealed/closed pung. A kong is also treated as a pung (melded kong as melded pung, concealed kong as concealed pung).
+- Set / Meld: General term for chows and pungs.
+- Eye / Head / Pair: The isolated pair in a standard winning hand.
+- Regular Winning Form: A winning hand form consisting of 4 sets and 1 pair.
+- Special Winning Forms: Winning hand forms not consisting of 4 sets and 1 pair. Under Chinese Official / Mahjong Competition Rules (MCR), special winning forms include Seven Pairs, Thirteen Orphans, Lesser Honors and Knitted Tiles, etc.
+- Concealed Hand: Also called men-zen-qing; the state of having made no chows, pungs, or melded kongs. Special winning forms are necessarily in a concealed state. Although concealed kongs do not break the concealed hand condition, they reveal information that the hand is not a special winning form.
+- Melds: General term for chows, pungs, and kongs claiming tiles discarded by other players to complete sets. Usually excludes concealed kongs. When concealed kongs are included, they are called concealed melds, while chows, pungs, and melded kongs are called open/melded melds.
+- Standing Tiles: Tiles in hand excluding melded chows, pungs, and kongs.
+- Hand Tiles: The entire hand including standing tiles and melded chows, pungs, and kongs; sometimes refers only to standing tiles.
+- Ready Hand / Waiting: The state of needing only one tile to complete a winning hand.
+- 1-Shanten: The state of being one tile away from ready/waiting (also called 1-xiangting). Similarly, 2-shanten, 3-shanten, N-shanten.
+- Shanten Number: The minimum number of tiles needed to reach the ready/waiting state.
+- Useful Tiles: Tiles that reduce the shanten number (advancing tiles).
+- Improvement Tiles: Tiles that increase the number of useful tiles (broadening the waiting/advancing tile range).
+- Pair: Two identical tiles. An eye/head must be a pair, but a pair is not necessarily the eye/head.
+- Two-sided Wait: (1) Two consecutive numbered tiles of the same suit (e.g., 45m), which can form a chow with adjacent tiles on either side. (2) Abbreviation for two-sided proto-run.
+- Closed Wait / Inside Wait: (1) Two numbered tiles of the same suit separated by 1 rank (e.g., 57s), which can only form a chow with the middle tile; this middle tile is called the closed wait tile. (2) Abbreviation for closed wait proto-run. (3) The "Closed Wait" fan in MCR.
+- Edge Wait: (1) Two consecutive numbered tiles at boundary positions (e.g., 12m or 89s), which can only form a chow with a tile on one side (3m or 7s); this 3m or 7s is called the edge wait tile. (2) Abbreviation for edge wait proto-run. (3) The "Edge Wait" fan in MCR.
+- Proto-run / Incomplete Set: Two tiles that need one more tile to complete a set. Forms include two-sided proto-runs, closed-wait proto-runs, edge-wait proto-runs, and sometimes a pair can be viewed as an incomplete pung.
+- Complex Incomplete Set: An incomplete set formed by 3 or more tiles, such as consecutive closed waits, two-sided wait with a pair, closed wait with a pair, edge wait with a pair, etc.
+- Dual Wait / Double-Pair Wait: When waiting for a win, all other tiles have formed sets and two pairs remain; drawing a third tile to match either pair completes a pung and wins, with the remaining pair serving as the eye/head.
 
-## 字符串化说明
- - 数牌：万=m 条=s 饼=p。后缀使用小写字母，一连串同花色的数牌可合并使用用一个后缀，如123m、678s等等。
- - 字牌：东南西北=ESWN，中发白=CFP。使用大写字母。亦兼容天凤风格的后缀z，但按中国习惯顺序567z为中发白。
- - 吃、碰、杠用英文\[\]，可选用逗号+数字表示供牌来源。具体规则如下：
-   - 吃：由于只能吃上家，逗号后的数字表示第几张牌是由上家打出，例如：\[567m,2\]表示57万吃6万（第2张），对于不指定数字的，默认第1张为上家打出。
-   - 碰：逗号后的数字表示由哪家打出，根据从左到右的直观顺序，1为上家，2为对家，3为下家，例如：\[999s,3\]表示碰下家的9条。对于不指定数字的，默认为上家打出。
-   - 杠：与碰类似，但对于不指定数字的，则认为是暗杠。例如：\[SSSS\]表示暗杠南；\[8888p,1\]表示大明杠上家的8饼。当数字为5、6、7时，表示加杠。例如：\[1111s,6\]表示碰对家的1条后，又摸到1条加杠。
- - 范例：
-   - \[EEEE\]\[CCCC\]\[FFFF\]\[PPPP\]NN
-   - 1112345678999s9s
-   - \[WWWW,1\]\[444s\]45m678pFF6m
-   - \[EEEE\]288s349pSCFF2p
-   - \[123p,1\]\[345s,2\]\[999s,3\]6m6pEW1m
-   - 356m18s1579pWNFF9p
+## String Format
+- Numbered tiles: Characters (Wan) = `m`, Bamboos (Tiao/Sou) = `s`, Dots (Bing/Pin) = `p`. Suffixes use lowercase letters; consecutive tiles of the same suit can share a single suffix, e.g., `123m`, `678s`, etc.
+- Honor tiles: East, South, West, North = `ESWN`; Red, Green, White Dragons = `CFP` (Chun, Fa, Po). Uses uppercase letters. Also compatible with Tenhou-style suffix `z`, where `567z` corresponds to Red, Green, White Dragons by Chinese convention.
+- Chows, pungs, and kongs are enclosed in square brackets `[]`, optionally using comma + digit to indicate the tile source:
+  - Chow: Since a player can only chow from the player to the left (upper seat), the digit after comma indicates which tile in the sequence was discarded by the upper seat. For example: `[567m,2]` means 57m chowed the 6m (the 2nd tile). If omitted, defaults to the 1st tile.
+  - Pung: The digit after comma indicates who discarded the tile, based on intuitive left-to-right order: 1 for upper seat (left), 2 for opposite seat (across), 3 for lower seat (right). For example: `[999s,3]` means pung 9s from the lower seat. If omitted, defaults to upper seat.
+  - Kong: Similar to pung, but if no digit is specified, it is treated as a concealed kong. For example: `[SSSS]` means concealed kong of South; `[8888p,1]` means melded kong of 8p from upper seat. When the digit is 5, 6, or 7, it represents an added kong (promoted kong). For example: `[1111s,6]` means after punging 1s from the opposite seat, drew another 1s to promote to kong.
+- Examples:
+  - `[EEEE][CCCC][FFFF][PPPP]NN`
+  - `1112345678999s9s`
+  - `[WWWW,1][444s]45m678pFF6m`
+  - `[EEEE]288s349pSCFF2p`
+  - `[123p,1][345s,2][999s,3]6m6pEW1m`
+  - `356m18s1579pWNFF9p`

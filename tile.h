@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2016-2027 Jeff Wang <summer_insects@163.com>
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -57,30 +57,29 @@ using std::uint32_t;
 using std::intptr_t;
 
 /**
- * @brief 代码注释中用到的术语简介
- * - 顺子：数牌中，花色相同序数相连的3张牌。
- * - 刻子：三张相同的牌。碰出的为明刻，未碰出的为暗刻。俗称坎。杠也算刻子，明杠算明刻，暗杠算暗刻。
- * - 面子：顺子和刻子的统称。俗称一句话、一坎牌。
- * - 雀头：基本和牌形式中，单独组合的对子，也叫将、眼。
- * - 基本和型：4面子1雀头的和牌形式。
- * - 特殊和型：非4面子1雀头的和牌形式，在国标规则中，有七对、十三幺、全不靠等特殊和型。
- * - 门清：也叫门前清，指不吃、不碰、不明杠的状态。特殊和型必然是门清状态。暗杠虽然不破门清，但会暴露出手牌不是特殊和型的信息。
- * - 副露：吃牌、碰牌、杠牌的统称，即利用其他选手打出的牌完成自己手牌面子的行为，一般不包括暗杠，也叫鸣牌，俗称动牌。
- *     副露有时候也包括暗杠，此时将暗杠称为之暗副露，而吃、碰、明杠称为明副露。
- * - 立牌：整个手牌除去吃、碰、杠之后的牌。
- * - 手牌：包括立牌和吃、碰、杠的牌，有时仅指立牌。
- * - 听牌：只差所需要的一张牌即能和牌的状态。俗称下叫、落叫、叫和（糊）。
- * - 一上听：指差一张就能听牌的状态，也叫一向听、一入听。以此类推有二上听、三上听、N上听。
- * - 上听数：达到听牌状态需要牌的张数。
- * - 有效牌：能使上听数减少的牌，也称进张牌、上张牌。
- * - 改良牌：能使有效牌增加的牌。通俗来说就是能使进张面变宽的牌。
- * - 对子：两张相同的牌。雀头一定是对子，但对子不一定是雀头。
- * - 两面：数牌中，花色相同数字相邻的两张牌，如45m，与两侧的牌都构成顺子。也叫两头。
- * - 嵌张：数牌中，花色相同数字相隔1的两张牌，如57s，只能与中间的牌构成顺子，中间的这张牌称为嵌张。
- * - 边张：也是数字相邻的两张牌，但由于处在边界位置，只能与一侧的牌能构成顺子，如12只能与3构成顺子、89只能与7构成顺子，这张3或者7便称为边张。
- * - 搭子：指差一张牌就能构成1组面子的两张牌。其形态有刻子搭子（即对子）、两面搭子、嵌张搭子、边张搭子。
- * - 复合搭子：多张牌构成的搭子。常见的有：连嵌张、两面带对子、嵌张带对子、边张带对子等等形态。
- * - 对倒：听牌时，其他牌都已经构成面子，剩余两对，只需任意一对成刻即可和牌，此时另一对充当雀头，这种听牌形态叫对倒，也叫双碰、对碰、对杵。
+ * @brief Brief terminology used in code comments
+ * - Chow: A sequence of 3 consecutive numbered tiles of the same suit.
+ * - Pung: Three identical tiles. Claimed from a discard is a melded pung; kept in hand without claiming is a concealed pung. A kong is also treated as a pung (melded kong as melded pung, concealed kong as concealed pung).
+ * - Set / Meld: General term for chows and pungs.
+ * - Eye / Head / Pair: The isolated pair in a standard winning hand.
+ * - Regular Winning Form: A winning hand form consisting of 4 sets and 1 pair.
+ * - Special Winning Forms: Winning hand forms not consisting of 4 sets and 1 pair. In MCR, includes Seven Pairs, Thirteen Orphans, Lesser Honors and Knitted Tiles, etc.
+ * - Concealed Hand: State of having made no chows, pungs, or melded kongs. Special winning forms are necessarily concealed. Concealed kongs do not break the concealed hand condition, but reveal information that the hand is not a special winning form.
+ * - Melds: General term for chows, pungs, and kongs claiming tiles discarded by other players to complete sets; usually excludes concealed kongs. When including concealed kongs, they are called concealed melds, while chows, pungs, and melded kongs are called open/melded melds.
+ * - Standing Tiles: Hand tiles excluding melded chows, pungs, and kongs.
+ * - Hand Tiles: The entire hand including standing tiles and melded chows, pungs, and kongs; sometimes refers only to standing tiles.
+ * - Ready Hand / Waiting: The state of needing only one tile to complete a winning hand.
+ * - 1-Shanten: The state of being one tile away from ready/waiting. Similarly, 2-shanten, 3-shanten, N-shanten.
+ * - Shanten Number: The minimum number of tiles needed to reach the ready/waiting state.
+ * - Useful Tiles: Tiles that reduce the shanten number (advancing tiles).
+ * - Improvement Tiles: Tiles that increase the number of useful tiles (broadening the waiting range).
+ * - Pair: Two identical tiles. An eye/head must be a pair, but a pair is not necessarily the eye/head.
+ * - Two-sided Wait: Two consecutive numbered tiles of the same suit (e.g., 45m), which can form a chow with adjacent tiles on either side.
+ * - Closed Wait: Two numbered tiles of the same suit separated by 1 rank (e.g., 57s), which can only form a chow with the middle tile.
+ * - Edge Wait: Two consecutive numbered tiles at boundary positions (e.g., 12m or 89s), which can only form a chow with a tile on one side (3m or 7s).
+ * - Proto-run / Incomplete Set: Two tiles that need one more tile to complete a set (pairs/incomplete pungs, two-sided waits, closed waits, edge waits).
+ * - Complex Incomplete Set: Incomplete set formed by 3 or more tiles, such as consecutive closed waits, two-sided wait with a pair, closed wait with a pair, edge wait with a pair, etc.
+ * - Dual Wait / Double-Pair Wait: When waiting for a win, all other tiles have formed sets and two pairs remain; either pair matching completes a pung to win, with the other serving as the eye/head.
  */
 
 
@@ -90,60 +89,60 @@ using std::intptr_t;
  */
 
 /**
- * @brief 花色
+ * @brief Suit
  */
 typedef uint8_t suit_t;
 
 /**
- * @brief 点数
+ * @brief Rank
  */
 typedef uint8_t rank_t;
 
-#define TILE_SUIT_NONE          0  ///< 无效
-#define TILE_SUIT_CHARACTERS    1  ///< 万子（CHARACTERS）
-#define TILE_SUIT_BAMBOO        2  ///< 条子（BAMBOO）
-#define TILE_SUIT_DOTS          3  ///< 饼子（DOTS）
-#define TILE_SUIT_HONORS        4  ///< 字牌（HONORS）
+#define TILE_SUIT_NONE          0  ///< Invalid
+#define TILE_SUIT_CHARACTERS    1  ///< Characters (CHARACTERS)
+#define TILE_SUIT_BAMBOO        2  ///< Bamboo (BAMBOO)
+#define TILE_SUIT_DOTS          3  ///< Dots (DOTS)
+#define TILE_SUIT_HONORS        4  ///< Honors (HONORS)
 
 /**
- * @brief 牌\n
- * 内存结构：
- * - 0-3 4bit 牌的点数
- * - 4-7 4bit 牌的花色
- * 合法的牌为：
- * - 0x11 - 0x19 万子（CHARACTERS）
- * - 0x21 - 0x29 条子（BAMBOO）
- * - 0x31 - 0x39 饼子（DOTS）
- * - 0x41 - 0x47 字牌（HONORS）
- * - 0x51 - 0x58 花牌（FLOWER）
+ * @brief Tile\n
+ * Memory layout:
+ * - 0-3 4-bit tile rank
+ * - 4-7 4-bit tile suit
+ * Valid tiles are:
+ * - 0x11 - 0x19 Characters (CHARACTERS)
+ * - 0x21 - 0x29 Bamboo (BAMBOO)
+ * - 0x31 - 0x39 Dots (DOTS)
+ * - 0x41 - 0x47 Honors (HONORS)
+ * - 0x51 - 0x58 Flowers (FLOWER)
  */
 typedef uint8_t tile_t;
 
 /**
- * @brief 生成一张牌
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] suit 花色
- * @param [in] rank 点数
- * @return tile_t 牌
+ * @brief Make a tile
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] suit Suit
+ * @param [in] rank Rank
+ * @return tile_t Tile
  */
 static FORCE_INLINE tile_t make_tile(suit_t suit, rank_t rank) {
     return (((suit & 0xF) << 4) | (rank & 0xF));
 }
 
 /**
- * @brief 获取牌的花色
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] tile 牌
- * @return suit_t 花色
+ * @brief Get the suit of a tile
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] tile Tile
+ * @return suit_t Suit
  */
 static FORCE_INLINE suit_t tile_get_suit(tile_t tile) {
     return ((tile >> 4) & 0xF);
 }
 
 /**
- * @brief 判断是否为花牌
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] tile 牌
+ * @brief Check if a tile is a flower tile
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] tile Tile
  * @return bool
  */
 static FORCE_INLINE bool is_flower(tile_t tile) {
@@ -151,17 +150,17 @@ static FORCE_INLINE bool is_flower(tile_t tile) {
 }
 
 /**
- * @brief 获取牌的点数
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] tile 牌
- * @return rank_t 点数
+ * @brief Get the rank of a tile
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] tile Tile
+ * @return rank_t Rank
  */
 static FORCE_INLINE rank_t tile_get_rank(tile_t tile) {
     return (tile & 0xF);
 }
 
 /**
- * @brief 所有牌的值，不包括花牌
+ * @brief Values of all tiles, excluding flower tiles
  */
 enum tile_value_t {
     TILE_1m = 0x11, TILE_2m, TILE_3m, TILE_4m, TILE_5m, TILE_6m, TILE_7m, TILE_8m, TILE_9m,
@@ -173,21 +172,21 @@ enum tile_value_t {
 
 template <typename Dummy = int>
 struct standard_tiles {
-    static const tile_t all[34];  // 所有合法的牌，不包括花牌
+    static const tile_t all[34];  // All valid tiles, excluding flower tiles
 
     static bool check(tile_t tile) {
         return valid_map[tile >> 5] & (1u << (tile & 0x1f));
     }
 
-    static const tile_t thirteen_orphans[13];  // 十三幺13面听
-    static const tile_t knitted_straight[6][9];  // 组合龙只有6种
+    static const tile_t thirteen_orphans[13];  // Thirteen Orphans 13-way wait
+    static const tile_t knitted_straight[6][9];  // Exactly 6 patterns of Knitted Straight
 
 private:
     static const uint32_t valid_map[8];
 };
 
 /**
- * @brief 所有合法的牌，不包括花牌
+ * @brief All valid tiles, excluding flower tiles
  */
 template <typename Dummy>
 const tile_t standard_tiles<Dummy>::all[] = {
@@ -202,7 +201,7 @@ const tile_t standard_tiles<Dummy>::thirteen_orphans[13] = {
     TILE_1m, TILE_9m, TILE_1s, TILE_9s, TILE_1p, TILE_9p, TILE_E, TILE_S, TILE_W, TILE_N, TILE_C, TILE_F, TILE_P
 };
 
-// 组合龙只有如下6种
+// Exactly 6 patterns of Knitted Straight:
 // 147m 258s 369p
 // 147m 369s 258p
 // 258m 147s 369p
@@ -219,7 +218,7 @@ const tile_t standard_tiles<Dummy>::knitted_straight[6][9] = {
     { TILE_3m, TILE_6m, TILE_9m, TILE_2s, TILE_5s, TILE_8s, TILE_1p, TILE_4p, TILE_7p },
 };
 
-// 用来辅助判断牌张是否合法的表
+// Table used to help validate whether a tile is valid
 template <typename Dummy>
 const uint32_t standard_tiles<Dummy>::valid_map[] = {
     0x3fe0000u, 0x3fe03feu, 0xfeu
@@ -227,51 +226,50 @@ const uint32_t standard_tiles<Dummy>::valid_map[] = {
 
 
 /**
- * @brief 牌表类型
+ * @brief Tile table type
  *
- * 说明：在判断听牌、计算上听数等算法中，主流的对于牌有两种存储方式：
- * - 一种是用牌表，各索引表示各种牌拥有的枚数，这种存储方式的优点是在递归计算时削减面子只需要修改表中相应下标的值，缺点是一手牌的总数不方便确定
- * - 另一种是直接用牌的数组，这种存储方式的优点是很容易确定一手牌的总数，缺点是在递归计算时削减面子不方便，需要进行数组删除元素操作
+ * Description: In algorithms such as ready hand checks and shanten calculations, there are two mainstream ways to store tiles:
+ * - One is using a tile table (histogram), where each index represents the count of that tile. The advantage is that when reducing sets during recursive calculation, one only needs to modify values at the corresponding index in the table; the disadvantage is that the total count of tiles in the hand is inconvenient to determine.
+ * - The other is directly using an array of tiles. The advantage is that the total count of tiles in hand is easy to determine; the disadvantage is that reducing sets during recursive calculation is inconvenient, requiring element deletion from the array.
  */
 typedef uint16_t tile_table_t[TILE_TABLE_SIZE];
 
-#define PACK_TYPE_NONE 0  ///< 无效
-#define PACK_TYPE_CHOW 1  ///< 顺子
-#define PACK_TYPE_PUNG 2  ///< 刻子
-#define PACK_TYPE_KONG 3  ///< 杠
-#define PACK_TYPE_PAIR 4  ///< 雀头
+#define PACK_TYPE_NONE 0  ///< Invalid
+#define PACK_TYPE_CHOW 1  ///< Chow
+#define PACK_TYPE_PUNG 2  ///< Pung
+#define PACK_TYPE_KONG 3  ///< Kong
+#define PACK_TYPE_PAIR 4  ///< Pair / Eye
 
 /**
- * @brief 牌组
- *  用于表示一组面子或者雀头
+ * @brief Pack / Meld
+ *  Used to represent a set (meld) or a pair (eye).
  *
- * 内存结构：
- * - 0-7 8bit tile 牌（对于顺子，则表示中间那张牌，比如234p，那么牌为3p）
- * - 8-11 4bit type 牌组类型，使用PACK_TYPE_xxx宏
- * - 12-13 2bit offer 供牌信息，取值范围为0123\n
- * - 14 1bit promoted 是否为加杠
- *       0表示暗手（暗顺、暗刻、暗杠），非0表示明手（明顺、明刻、明杠）
- *
- *       对于牌组是刻子和杠时，123分别来表示是上家/对家/下家供的\n
- *       对于牌组为顺子时，由于吃牌只能是上家供，这里用123分别来表示第几张是上家供的
+ * Memory layout:
+ * - 0-7 8-bit tile: Tile (for a chow, represents the middle tile; e.g., for 234p, the tile is 3p)
+ * - 8-11 4-bit type: Pack type, using PACK_TYPE_xxx macros
+ * - 12-13 2-bit offer: Offer/source information, range 0-3\n
+ * - 14 1-bit promoted: Whether this is an added kong (promoted kong)
+ *       0 indicates concealed (concealed chow, concealed pung, concealed kong), non-zero indicates melded (melded chow, melded pung, melded kong)\n
+ *       When the pack is a pung or kong, 1, 2, 3 indicate offered by upper seat / opposite seat / lower seat respectively\n
+ *       When the pack is a chow, since claiming a chow can only be from the upper seat, 1, 2, 3 indicate which tile (1st, 2nd, or 3rd) was offered by the upper seat
  */
 typedef uint16_t pack_t;
 
 /**
- * @brief 生成一个牌组
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] offer 供牌信息
- * @param [in] type 牌组类型
- * @param [in] tile 牌（对于顺子，为中间那张牌）
+ * @brief Make a pack
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] offer Offer info
+ * @param [in] type Pack type
+ * @param [in] tile Tile (for a chow, the middle tile)
  */
 static FORCE_INLINE pack_t make_pack(uint8_t offer, uint8_t type, tile_t tile) {
     return (offer << 12 | (type << 8) | tile);
 }
 
 /**
- * @brief 牌组是否为明的
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] pack 牌组
+ * @brief Check if pack is melded
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] pack Pack
  * @return bool
  */
 static FORCE_INLINE bool is_pack_melded(pack_t pack) {
@@ -279,10 +277,10 @@ static FORCE_INLINE bool is_pack_melded(pack_t pack) {
 }
 
 /**
- * @brief 牌组是否为加杠
- *  当牌组不是PACK_TYPE_KONG时，结果是无意义的
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] pack 牌组
+ * @brief Check if pack is an added kong (promoted kong)
+ *  Meaningless when pack is not PACK_TYPE_KONG.
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] pack Pack
  * @return bool
  */
 static FORCE_INLINE bool is_promoted_kong(pack_t pack) {
@@ -290,20 +288,20 @@ static FORCE_INLINE bool is_promoted_kong(pack_t pack) {
 }
 
 /**
- * @brief 碰的牌组转换为加杠
- *  当牌组不是PACK_TYPE_PUNG时，结果是无意义的
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] pack 碰的牌组
- * @return pack_t 加杠的牌组
+ * @brief Convert a pung pack to an added kong
+ *  Meaningless when pack is not PACK_TYPE_PUNG.
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] pack Pung pack
+ * @return pack_t Added kong pack
  */
 static FORCE_INLINE pack_t promote_pung_to_kong(pack_t pack) {
     return pack | 0x4300;
 }
 
 /**
- * @brief 牌组的供牌信息
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] pack 牌组
+ * @brief Get offer info of pack
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] pack Pack
  * @return uint8_t
  */
 static FORCE_INLINE uint8_t pack_get_offer(pack_t pack) {
@@ -311,37 +309,37 @@ static FORCE_INLINE uint8_t pack_get_offer(pack_t pack) {
 }
 
 /**
- * @brief 获取牌组的类型
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] pack 牌组
- * @return uint8_t 牌组类型
+ * @brief Get the type of pack
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] pack Pack
+ * @return uint8_t Pack type
  */
 static FORCE_INLINE uint8_t pack_get_type(pack_t pack) {
     return ((pack >> 8) & 0xF);
 }
 
 /**
- * @brief 获取牌的点数
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] pack 牌组
- * @return tile_t 牌（对于顺子，为中间那张牌）
+ * @brief Get the tile of pack
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] pack Pack
+ * @return tile_t Tile (for a chow, the middle tile)
  */
 static FORCE_INLINE tile_t pack_get_tile(pack_t pack) {
     return (pack & 0xFF);
 }
 
 /**
- * @brief 手牌结构
- *  手牌结构一定满足等式：3*副露的牌组数+立牌数=13
+ * @brief Hand tiles structure
+ *  Hand tiles structure must satisfy the equation: 3 * melded pack count + standing tile count = 13
  */
 struct hand_tiles_t {
-    pack_t fixed_packs[5];      ///< 副露的牌组（面子），包括暗杠
-    intptr_t pack_count;        ///< 副露的牌组（面子）数，包括暗杠
-    tile_t standing_tiles[13];  ///< 立牌
-    intptr_t tile_count;        ///< 立牌数
+    pack_t fixed_packs[5];      ///< Melded packs (sets), including concealed kongs
+    intptr_t pack_count;        ///< Melded pack (set) count, including concealed kongs
+    tile_t standing_tiles[13];  ///< Standing tiles
+    intptr_t tile_count;        ///< Standing tile count
 };
 
-// 牌组的特征值，用该值判断一种划分是否已经来过
+// Eigenvalue of a pack, used to determine whether a partition has already been visited
 typedef uint32_t eigen_t;
 
 static FORCE_INLINE eigen_t make_eigen(tile_t t1, tile_t t2, tile_t t3) {
@@ -349,65 +347,65 @@ static FORCE_INLINE eigen_t make_eigen(tile_t t1, tile_t t2, tile_t t3) {
 }
 
 /**
- * @brief 判断是否为绿一色构成牌
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] tile 牌
+ * @brief Check if a tile can be part of All Green
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] tile Tile
  * @return bool
  */
 static FORCE_INLINE bool is_green(tile_t tile) {
-    // 最基本的逐个判断，23468s及发财为绿一色构成牌
+    // Basic element check: 23468s and Green Dragon (Fa) are green tiles
     //return (tile == TILE_2s || tile == TILE_3s || tile == TILE_4s || tile == TILE_6s || tile == TILE_8s || tile == TILE_F);
 
-    // 算法原理：
-    // 0x48-0x11=0x37=55刚好在一个64位整型的范围内，
-    // 用uint64_t的每一位表示一张牌的标记，事先得到一个魔数，
-    // 然后每次测试相应位即可
+    // Algorithm principle:
+    // 0x48-0x11=0x37=55 fits within a 64-bit integer range.
+    // Use each bit of uint64_t to represent a tile flag, precompute a magic number,
+    // and then test the corresponding bit.
     return !!(0x0020000000AE0000ULL & (1ULL << (tile - TILE_1m)));
 }
 
 /**
- * @brief 判断是否为推不倒构成牌
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] tile 牌
+ * @brief Check if a tile can be part of Reversible Tiles
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] tile Tile
  * @return bool
  */
 static FORCE_INLINE bool is_reversible(tile_t tile) {
-    // 最基本的逐个判断：245689s、1234589p及白板为推不倒构成牌
+    // Basic element check: 245689s, 1234589p, and White Dragon (Bai) are reversible tiles
     //return (tile == TILE_2s || tile == TILE_4s || tile == TILE_5s || tile == TILE_6s || tile == TILE_8s || tile == TILE_9s ||
     //    tile == TILE_1p || tile == TILE_2p || tile == TILE_3p || tile == TILE_4p || tile == TILE_5p || tile == TILE_8p || tile == TILE_9p ||
     //    tile == TILE_P);
 
-    // 算法原理同绿一色构成牌判断函数
+    // Algorithm principle same as is_green
     return !!(0x0040019F01BA0000ULL & (1ULL << (tile - TILE_1m)));
 }
 
 /**
- * @brief 判断是否为数牌幺九（老头牌）
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] tile 牌
+ * @brief Check if a tile is a terminal (1 or 9 of numbered suit)
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] tile Tile
  * @return bool
  */
 static FORCE_INLINE bool is_terminal(tile_t tile) {
-    // 最基本的逐个判断
+    // Basic element check
     //return (tile == TILE_1m || tile == TILE_9m || tile == TILE_1s || tile == TILE_9s || tile == TILE_1p || tile == TILE_9p);
 
-    // 算法原理：观察数牌幺九的二进制位：
-    // 0x11：0001 0001
-    // 0x19：0001 1001
-    // 0x21：0010 0001
-    // 0x29：0010 1001
-    // 0x31：0011 0001
-    // 0x39：0011 1001
-    // 所有牌的低4bit只会出现在0001到1001之间，跟0111位与，只有0001和1001的结果为1
-    // 所有数牌的高4bit只会出现在0001到0011之间，跟1100位与，必然为0
-    // 于是构造魔数0xC7（1100 0111）跟牌位与，结果为1的，就为数牌幺九
-    // 缺陷：低4bit的操作会对0xB、0xD、0xF产生误判，高4bit的操作会对0x01和0x09产生误判
+    // Algorithm principle: Observe binary bits of terminals:
+    // 0x11: 0001 0001
+    // 0x19: 0001 1001
+    // 0x21: 0010 0001
+    // 0x29: 0010 1001
+    // 0x31: 0011 0001
+    // 0x39: 0011 1001
+    // The lower 4 bits of all tiles only appear between 0001 and 1001; bitwise AND with 0111 gives 1 only for 0001 and 1001.
+    // The upper 4 bits of all numbered tiles only appear between 0001 and 0011; bitwise AND with 1100 must be 0.
+    // Thus constructing magic number 0xC7 (1100 0111) and bitwise ANDing with tile, if result is 1, it is a terminal.
+    // Flaw: The lower 4-bit operation misjudges 0xB, 0xD, 0xF; upper 4-bit operation misjudges 0x01 and 0x09.
     return ((tile & 0xC7) == 1);
 }
 
 /**
- * @brief 判断是否为风牌
- * @param [in] tile 牌
+ * @brief Check if a tile is a wind tile
+ * @param [in] tile Tile
  * @return bool
  */
 static FORCE_INLINE bool is_winds(tile_t tile) {
@@ -415,8 +413,8 @@ static FORCE_INLINE bool is_winds(tile_t tile) {
 }
 
 /**
- * @brief 判断是否为箭牌（三元牌）
- * @param [in] tile 牌
+ * @brief Check if a tile is a dragon tile
+ * @param [in] tile Tile
  * @return bool
  */
 static FORCE_INLINE bool is_dragons(tile_t tile) {
@@ -424,8 +422,8 @@ static FORCE_INLINE bool is_dragons(tile_t tile) {
 }
 
 /**
- * @brief 判断是否为字牌
- * @param [in] tile 牌
+ * @brief Check if a tile is an honor tile
+ * @param [in] tile Tile
  * @return bool
  */
 static FORCE_INLINE bool is_honor(tile_t tile) {
@@ -433,8 +431,8 @@ static FORCE_INLINE bool is_honor(tile_t tile) {
 }
 
 /**
- * @brief 判断是否为数牌
- * @param [in] tile 牌
+ * @brief Check if a tile is a numbered tile
+ * @param [in] tile Tile
  * @return bool
  */
 static FORCE_INLINE bool is_numbered_suit(tile_t tile) {
@@ -445,20 +443,20 @@ static FORCE_INLINE bool is_numbered_suit(tile_t tile) {
 }
 
 /**
- * @brief 判断是否为数牌（更快）
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
+ * @brief Check if a tile is a numbered tile (faster)
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
  * @see is_numbered_suit
- * @param [in] tile 牌
+ * @param [in] tile Tile
  * @return bool
  */
 static FORCE_INLINE bool is_numbered_suit_quick(tile_t tile) {
-    // 算法原理：数牌为0x11-0x19，0x21-0x29，0x31-0x39，跟0xC0位与，结果为0
+    // Algorithm principle: Numbered tiles are 0x11-0x19, 0x21-0x29, 0x31-0x39; bitwise AND with 0xC0 gives 0.
     return !(tile & 0xC0);
 }
 
 /**
- * @brief 判断是否为幺九牌（包括数牌幺九和字牌）
- * @param [in] tile 牌
+ * @brief Check if a tile is a terminal or honor tile
+ * @param [in] tile Tile
  * @return bool
  */
 static FORCE_INLINE bool is_terminal_or_honor(tile_t tile) {
@@ -466,26 +464,26 @@ static FORCE_INLINE bool is_terminal_or_honor(tile_t tile) {
 }
 
 /**
- * @brief 判断两张牌花色是否相同（更快）
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] tile0 牌0
- * @param [in] tile1 牌1
+ * @brief Check if two tiles have the same suit (faster)
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] tile0 Tile 0
+ * @param [in] tile1 Tile 1
  * @return bool
  */
 static FORCE_INLINE bool is_suit_equal_quick(tile_t tile0, tile_t tile1) {
-    // 算法原理：高4bit表示花色
+    // Algorithm principle: Upper 4 bits represent suit
     return ((tile0 & 0xF0) == (tile1 & 0xF0));
 }
 
 /**
- * @brief 判断两张牌点数是否相同（更快）
- *  函数不检查输入的合法性。如果输入不合法的值，将无法保证合法返回值的合法性
- * @param [in] tile0 牌0
- * @param [in] tile1 牌1
+ * @brief Check if two tiles have the same rank (faster)
+ *  The function does not validate input legality. If an invalid value is passed, the legality of the return value cannot be guaranteed.
+ * @param [in] tile0 Tile 0
+ * @param [in] tile1 Tile 1
  * @return bool
  */
 static FORCE_INLINE bool is_rank_equal_quick(tile_t tile0, tile_t tile1) {
-    // 算法原理：低4bit表示花色。高4bit设置为C是为了过滤掉字牌
+    // Algorithm principle: Lower 4 bits represent rank. Upper 4 bits set to C to filter out honor tiles
     return ((tile0 & 0xCF) == (tile1 & 0xCF));
 }
 

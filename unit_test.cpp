@@ -1,4 +1,4 @@
-﻿#include "tile.h"
+#include "tile.h"
 #include "shanten.h"
 #include "stringify.h"
 #include "fan_calculator.h"
@@ -114,7 +114,7 @@ void test_shanten(const char *str) {
         tile_table_t cnt_table;
         map_hand_tiles(hand_tiles, &cnt_table);
 
-        std::printf("%d枚", count_useful_tile(cnt_table, useful_table));
+        std::printf("%d tiles", count_useful_tile(cnt_table, useful_table));
     };
 
     std::puts(str);
@@ -158,35 +158,35 @@ int main(int argc, const char *argv[]) {
     //return 0;
 
 #if 1
-    // 组合龙的边嵌钓问题 2023.10.29
+    // Knitted Straight edge/closed/single wait issue 2023.10.29
     test_points("[345m3]258m1488s369p7s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("[345m3]258m1477s369p7s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("[345m3]258m1478s369p8s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
 
-    // 天和九莲宝灯 2023.10.27
-    // 支持的算法：107 93 90 90 92
-    // 不支持的算法：47 33 30 30 32
+    // Blessing of Heaven Nine Gates 2023.10.27
+    // Supported algorithms: 107 93 90 90 92
+    // Unsupported algorithms: 47 33 30 30 32
     test_points("11112345678999p", WIN_FLAG_INITIAL | WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("11122345678999p", WIN_FLAG_INITIAL | WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("11123345678999p", WIN_FLAG_INITIAL | WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("11123445678999p", WIN_FLAG_INITIAL | WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("11123455678999p", WIN_FLAG_INITIAL | WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
 
-    // 优先选择三同刻 2023.9.2
+    // Prefer Triple Pung 2023.9.2
     test_points("4445677m777s777p7m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("4456777m444s444p4m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
 
-    // 组合龙的四归一问题 2023.5.30
+    // Knitted Straight Tile Hog issue 2023.5.30
     test_points("[678s3]147m5888s369p2s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("147m258s3666789p6p", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("[666p]147m258s3779p6p", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("[666m]3556m147s258p9m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("3569m258s122247p5m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
 
-    // 依然是边嵌钓问题 2023.5.20
+    // Still edge/closed/single wait issue 2023.5.20
     test_points("2222444466688m3m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
 
-    // 私货 天和、地和、人和 2023.5.13
+    // Custom feature: Blessing of Heaven, Blessing of Earth, Blessing of Human 2023.5.13
     test_points("EEESSCCCFFFPPP", WIN_FLAG_INITIAL | WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("EEESSCCCFFFPPP", WIN_FLAG_INITIAL, wind_t::EAST, wind_t::EAST);
     test_points("EESSSCCCFFFPPP", WIN_FLAG_INITIAL | WIN_FLAG_SELF_DRAWN, wind_t::SOUTH, wind_t::SOUTH);
@@ -202,7 +202,7 @@ int main(int argc, const char *argv[]) {
     test_points("147m3669s122358p6s", WIN_FLAG_INITIAL | WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::SOUTH);
     test_points("369m258s147pEEPPE", WIN_FLAG_INITIAL | WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
 
-    // 组合龙的边嵌钓兼容 2023.5.13
+    // Knitted Straight edge/closed/single wait compatibility 2023.5.13
     test_points("1233369m147s258p3m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("2333469m147s258p3m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("3369m147s258pEEE3m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
@@ -210,7 +210,7 @@ int main(int argc, const char *argv[]) {
     test_points("2233458m147s369p3m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("2358m147s369pEEE3m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
 
-    // 拆分一色三步高 2023.5.12
+    // Decompose Pure Shifted Chows 2023.5.12
     test_points("12233445667pWW8p", WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("[456s2][234s3]1223678s2s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("[789s3]33m34566778s5s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);  //
@@ -223,7 +223,7 @@ int main(int argc, const char *argv[]) {
     test_points("12333445678sFF2s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);  //
     test_points("[678p]34556778pNN9p", WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);  //
 
-    // 多种拆法番数一样时，优先选择问题 2022.3.7
+    // Preference when multiple decompositions have equal fan points 2022.3.7
     test_points("44556m445566s55p6m", WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("445566m5s445566p5s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("[678p]55s222333444p", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
@@ -234,7 +234,7 @@ int main(int argc, const char *argv[]) {
     test_points("PPP11123444p231m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("PPP66678999p789m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
 
-    // 天和相关问题 2019.4.23
+    // Blessing of Heaven issues 2019.4.23
     test_points("1112345678999p9p", WIN_FLAG_INITIAL | WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("1112345678999p9p", WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("1112345678999p9p", WIN_FLAG_INITIAL, wind_t::EAST, wind_t::EAST);
@@ -242,56 +242,56 @@ int main(int argc, const char *argv[]) {
     test_points("123456m45679p66s8p", WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("123456m45679p66s8p", WIN_FLAG_INITIAL, wind_t::EAST, wind_t::EAST);
 
-    // BUG测试
+    // BUG tests
     test_points("[234s][234s][234s][234s]6s6s", WIN_FLAG_LAST_TILE, wind_t::EAST, wind_t::EAST);
 
-    test_points("1122233334444s2s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);  // 剪枝BUG 2018.4.18
+    test_points("1122233334444s2s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);  // Pruning BUG 2018.4.18
 
-    // 组合龙莫名其妙的边张Bug 2018.3.29
+    // Knitted Straight unexpected edge wait Bug 2018.3.29
     test_points("33469m258s147pWW2m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
 
-    // 套算一次原则相关bug
-    test_points("234s2233445678p8p", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST); // 喜相逢、一般高、连六 2017.11.10
-    test_points("[123m][789p]789s1299p3p", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);  // 漏算老少副BUG 2017.10.23
+    // Combine-Once Principle related bugs
+    test_points("234s2233445678p8p", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST); // Mixed Double Chow, Pure Double Chow, Short Straight 2017.11.10
+    test_points("[123m][789p]789s1299p3p", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);  // Missed Two Terminal Chows BUG 2017.10.23
 
-    // 清龙+同色龙顺，统一改为一般高 2017.5.22
+    // Pure Straight + same-suit chow changed uniformly to Pure Double Chow 2017.5.22
     test_points("112233456789mEE", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("123445566789sSS", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("123456778899pWW", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
 
-    // 三杠少计双暗刻 2017.4.9
+    // Three Kongs undercounted Two Concealed Pungs 2017.4.9
     test_points("[2222s][3333s][5555p1]67mEE8m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
-    // 七星七对误判为连七对 2017.3.26
+    // Greater Honors and Knitted Tiles / Seven Pairs misidentified as Seven Shifted Pairs 2017.3.26
     test_points("EESSWWNNCCFFPP", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
-    // 小四喜的牌型中不会有幺九刻（这样是混幺九）2016.12.15
+    // Little Four Winds hand cannot have Pung of Terminals or Honors (that would be All Terminals and Honors) 2016.12.15
     test_points("[EEE][WWW][NNN]11sSS1s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
-    // 门清一的色双龙漏计边嵌钓 2016.7.28
+    // Concealed Pure Terminal Chows missed edge/closed/single wait 2016.7.28
     test_points("1122355778899m3m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("1123355778899s2s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("1122335778899p5p", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
-    // 七对与基本和型多面听，多计了边嵌钓2016.7.23
+    // Seven Pairs and regular form multiple waits overcounted edge/closed/single wait 2016.7.23
     test_points("445566m2277779s8s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
 
-    // 基本测试
-    test_wait("19m19s199pESWNCF");  // 十三幺听白
-    test_wait("19m19s19pESWNCFP");  // 十三幺13面听
+    // Basic tests
+    test_wait("19m19s199pESWNCF");  // Thirteen Orphans waiting on White Dragon
+    test_wait("19m19s19pESWNCFP");  // Thirteen Orphans 13-way wait
 
-    test_wait("2229999mSSWWFF");  // 七对听2m
+    test_wait("2229999mSSWWFF");  // Seven Pairs waiting on 2m
 
-    test_wait("369s147pESWNCFP");  // 全不靠听258m
-    test_wait("58m369s17pEWNCFP");  // 全不靠听 2m 4p 南
-    test_wait("258m369s147pECFP");  // 全不靠听 南 西 北
+    test_wait("369s147pESWNCFP");  // Lesser Honors and Knitted Tiles waiting on 258m
+    test_wait("58m369s17pEWNCFP");  // Lesser Honors and Knitted Tiles waiting on 2m, 4p, South
+    test_wait("258m369s147pECFP");  // Lesser Honors and Knitted Tiles waiting on South, West, North
 
-    test_wait("1112345678999s");  // 九莲宝灯
+    test_wait("1112345678999s");  // Nine Gates
     test_wait("1112223456777m");
     test_wait("2223334445678m");
-    test_wait("25558m369s46778p");  // 组合龙听龙身，1p
-    test_wait("25558m369s14677p");  // 组合龙听第四组，58p
-    test_wait("25568m369s14777p");  // 组合龙听第四组，47m
-    test_wait("258m369s1445677p");  // 组合龙听两面钓将，47p
+    test_wait("25558m369s46778p");  // Knitted Straight waiting on body, 1p
+    test_wait("25558m369s14677p");  // Knitted Straight waiting on 4th set, 58p
+    test_wait("25568m369s14777p");  // Knitted Straight waiting on 4th set, 47m
+    test_wait("258m369s1445677p");  // Knitted Straight two-sided wait for pair, 47p
     test_wait("2233445566778s");
-    test_wait("2458m369s147p");  // 组合龙听单钓将，4m
-    test_wait("22334455p77779s");  // 基本形听8s、七对听9s
+    test_wait("2458m369s147p");  // Knitted Straight single wait for pair, 4m
+    test_wait("22334455p77779s");  // Regular form waiting on 8s, Seven Pairs waiting on 9s
 
     test_points("445566m445566s5p5p", WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
 
@@ -321,7 +321,7 @@ int main(int argc, const char *argv[]) {
 #endif
     test_points("2223344555667m4m", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("2223344555667m4m", WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
-    // 理论最高番
+    // Theoretical maximum fan
     test_points("[EEEE][CCCC][FFFF][PPPP]NN", WIN_FLAG_SELF_DRAWN | WIN_FLAG_KONG_INVOLVED | WIN_FLAG_WALL_LAST, wind_t::EAST, wind_t::EAST);
     test_points("[1111p][2222p][3333p]111s1m1m", WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
     test_points("445566m5566p556s6s", WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
@@ -329,7 +329,7 @@ int main(int argc, const char *argv[]) {
     test_points("12378m123pCCPPP9m", WIN_FLAG_DISCARD | WIN_FLAG_LAST_TILE, wind_t::EAST, wind_t::EAST);
     //return 0;
 
-    // 以下测试用例来自于规则书上
+    // The following test cases are from the official rulebook
     std::puts("==== test big four winds ====");
     test_points("[EEE][WWW]SSSNNCCN", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     test_points("[EEE][WWW]99mSSSNNN", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
