@@ -1,5 +1,4 @@
 #include "tile.h"
-#include "shanten.h"
 #include "stringify.h"
 #include "fan_calculator.h"
 
@@ -11,42 +10,6 @@
 #include <cstring>
 
 using namespace mahjong;
-
-static int count_useful_tile(const tile_table_t &used_table, const useful_table_t &useful_table) {
-    int cnt = 0;
-    const auto &all_tiles = standard_tiles<>::all;
-    for (int i = 0; i < 34; ++i) {
-        tile_t t = all_tiles[i];
-        if (useful_table[t]) {
-            cnt += 4 - used_table[t];
-        }
-    }
-    return cnt;
-}
-
-void test_wait(const char *str) {
-    hand_tiles_t hand_tiles;
-    tile_t serving_tile;
-    parse_hand_tiles(str, std::strlen(str), &hand_tiles, &serving_tile);
-
-    std::cout << "----------------" << std::endl;
-    std::puts(str);
-    useful_table_t useful_table;
-    bool is_wait = mahjong::is_waiting(hand_tiles, &useful_table);
-    if (is_wait) {
-        std::puts(" waiting:");
-        for (int i = 0; i < 34; ++i) {
-            tile_t t = standard_tiles<>::all[i];
-            if (useful_table[t]) {
-                std::printf("%s ", tile_name<>::text[i]);
-            }
-        }
-    }
-    else {
-        std::puts("not wait!");
-    }
-    std::puts("");
-}
 
 void test_points(const char *str, win_flag_t win_flag, wind_t prevalent_wind, wind_t seat_wind) {
     calculate_param_t param;
@@ -90,71 +53,10 @@ void test_points(const char *str, win_flag_t win_flag, wind_t prevalent_wind, wi
     }
 }
 
-void test_shanten(const char *str) {
-    hand_tiles_t hand_tiles;
-    tile_t serving_tile;
-    int ret = parse_hand_tiles(str, std::strlen(str), &hand_tiles, &serving_tile);
-    if (ret != 0) {
-        std::printf("error at line %d error = %ld\n", __LINE__, ret);
-        return;
-    }
-
-    char buf[20];
-    ret = hand_tiles_to_string(&hand_tiles, buf, sizeof(buf));
-    std::puts(buf);
-
-    auto display = [](const hand_tiles_t *hand_tiles, useful_table_t &useful_table) {
-        for (int i = 0; i < 34; ++i) {
-            tile_t t = standard_tiles<>::all[i];
-            if (useful_table[t]) {
-                std::printf("%s ", tile_name<>::text[i]);
-            }
-        }
-
-        tile_table_t cnt_table;
-        map_hand_tiles(hand_tiles, &cnt_table);
-
-        std::printf("%d tiles", count_useful_tile(cnt_table, useful_table));
-    };
-
-    std::puts(str);
-    useful_table_t useful_table/* = {false}*/;
-    int ret0;
-    ret0 = thirteen_orphans_shanten(hand_tiles.standing_tiles, hand_tiles.tile_count, &useful_table);
-    std::printf("131=== %d shanten\n", ret0);
-    if (ret0 != std::numeric_limits<int>::max()) display(&hand_tiles, useful_table);
-    std::puts("\n");
-
-    ret0 = seven_pairs_shanten(hand_tiles.standing_tiles, hand_tiles.tile_count, &useful_table);
-    std::printf("7d=== %d shanten\n", ret0);
-    if (ret0 != std::numeric_limits<int>::max()) display(&hand_tiles, useful_table);
-    std::puts("\n");
-
-    ret0 = honors_and_knitted_tiles_shanten(hand_tiles.standing_tiles, hand_tiles.tile_count, &useful_table);
-    std::printf("honors and knitted tiles %d shanten\n", ret0);
-    if (ret0 != std::numeric_limits<int>::max()) display(&hand_tiles, useful_table);
-    std::puts("\n");
-
-    ret0 = knitted_straight_shanten(hand_tiles.standing_tiles, hand_tiles.tile_count, &useful_table);
-    std::printf("knitted straight in regular form %d shanten\n", ret0);
-    if (ret0 != std::numeric_limits<int>::max()) display(&hand_tiles, useful_table);
-    std::puts("\n");
-
-    ret0 = regular_shanten(hand_tiles.standing_tiles, hand_tiles.tile_count, &useful_table);
-    std::printf("regular form %d shanten\n", ret0);
-    if (ret0 != std::numeric_limits<int>::max()) display(&hand_tiles, useful_table);
-    std::puts("\n");
-}
-
 int main(int argc, const char *argv[]) {
 #ifdef _MSC_VER
     std::system("chcp 65001");
 #endif
-
-    //test_shanten("19m19s22pESWCFPP");
-    //test_shanten("278m3378s3779pEC");
-    test_shanten("111m 5m12p1569sSWP");
-    test_shanten("[111m]5m12p1569sSWP");
     //return 0;
 
 #if 1
@@ -271,27 +173,6 @@ int main(int argc, const char *argv[]) {
     test_points("1122335778899p5p", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
     // Seven Pairs and regular form multiple waits overcounted edge/closed/single wait 2016.7.23
     test_points("445566m2277779s8s", WIN_FLAG_DISCARD, wind_t::EAST, wind_t::EAST);
-
-    // Basic tests
-    test_wait("19m19s199pESWNCF");  // Thirteen Orphans waiting on White Dragon
-    test_wait("19m19s19pESWNCFP");  // Thirteen Orphans 13-way wait
-
-    test_wait("2229999mSSWWFF");  // Seven Pairs waiting on 2m
-
-    test_wait("369s147pESWNCFP");  // Lesser Honors and Knitted Tiles waiting on 258m
-    test_wait("58m369s17pEWNCFP");  // Lesser Honors and Knitted Tiles waiting on 2m, 4p, South
-    test_wait("258m369s147pECFP");  // Lesser Honors and Knitted Tiles waiting on South, West, North
-
-    test_wait("1112345678999s");  // Nine Gates
-    test_wait("1112223456777m");
-    test_wait("2223334445678m");
-    test_wait("25558m369s46778p");  // Knitted Straight waiting on body, 1p
-    test_wait("25558m369s14677p");  // Knitted Straight waiting on 4th set, 58p
-    test_wait("25568m369s14777p");  // Knitted Straight waiting on 4th set, 47m
-    test_wait("258m369s1445677p");  // Knitted Straight two-sided wait for pair, 47p
-    test_wait("2233445566778s");
-    test_wait("2458m369s147p");  // Knitted Straight single wait for pair, 4m
-    test_wait("22334455p77779s");  // Regular form waiting on 8s, Seven Pairs waiting on 9s
 
     test_points("445566m445566s5p5p", WIN_FLAG_SELF_DRAWN, wind_t::EAST, wind_t::EAST);
 
@@ -586,5 +467,4 @@ int main(int argc, const char *argv[]) {
 }
 
 #include "stringify.cpp"
-#include "shanten.cpp"
 #include "fan_calculator.cpp"

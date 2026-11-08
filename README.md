@@ -4,7 +4,6 @@ mahjong-algorithm - Various Algorithms for Mahjong
 ## Overview
 - Although these algorithms are written in C++, they do not use C++ container classes and can be easily ported to other programming languages.
 - `fan_calculator`: Fan (points/scoring) calculation.
-- `shanten`: Ready hand (tenpai) check, waiting tile calculation, shanten calculation, and useful tile calculation.
 - `stringify`: String conversion routines.
 - See `unit_test.cpp` for details.
 
